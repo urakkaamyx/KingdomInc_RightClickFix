@@ -1,0 +1,52 @@
+{
+  "id": "RightClickFix",
+  "name": "Right Click Fix",
+  "version": "1.0.0",
+  "author": "Urakka",
+  "description": "Right click closes any open menu (build menu, tech tree, resources and more) and returns you to the workspace. The ESC menu is left alone.",
+  "repository": {
+    "platform": "GitHub",
+    "owner": "urakkaamyx",
+    "name": "KingdomInc_RightClickFix",
+    "url": "https://github.com/urakkaamyx/KingdomInc_RightClickFix",
+    "branch": "main",
+    "visibility": "public",
+    "topics": [],
+    "latestTag": null
+  },
+  "distribution": {
+    "nexus": {
+      "game": "kingdominc",
+      "modId": 22,
+      "fileId": null,
+      "url": "https://www.nexusmods.com/kingdominc/mods/22",
+      "requirements": [
+        {
+          "name": "BepInEx 5",
+          "url": "https://github.com/BepInEx/BepInEx/releases",
+          "minimumVersion": "5.x",
+          "type": "offsite"
+        }
+      ],
+      "tags": [
+        "AI-Generated Content",
+        "Quality of Life",
+        "User Interface"
+      ],
+      "tagsVerified": false,
+      "requirementsVerified": false
+    }
+  },
+  "development": {
+    "framework": "BepInEx",
+    "language": "C#",
+    "target": "netstandard2.1",
+    "dependencies": [
+      "BepInEx 5"
+    ]
+  },
+  "publishing": {
+    "githubReleases": null,
+    "nexusMods": null
+  }
+}
