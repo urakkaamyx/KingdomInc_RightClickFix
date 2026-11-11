@@ -12,7 +12,7 @@
     "branch": "main",
     "visibility": "public",
     "topics": [],
-    "latestTag": null
+    "latestTag": "v1.0.0"
   },
   "distribution": {
     "nexus": {
@@ -46,7 +46,7 @@
     ]
   },
   "publishing": {
-    "githubReleases": null,
+    "githubReleases": "https://github.com/urakkaamyx/KingdomInc_RightClickFix/releases/tag/v1.0.0",
     "nexusMods": null
   }
 }
