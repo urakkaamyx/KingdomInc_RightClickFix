@@ -18,7 +18,7 @@
     "nexus": {
       "game": "kingdominc",
       "modId": 22,
-      "fileId": null,
+      "fileId": 8361027,
       "url": "https://www.nexusmods.com/kingdominc/mods/22",
       "requirements": [
         {
@@ -47,6 +47,6 @@
   },
   "publishing": {
     "githubReleases": "https://github.com/urakkaamyx/KingdomInc_RightClickFix/releases/tag/v1.0.0",
-    "nexusMods": null
+    "nexusMods": "https://www.nexusmods.com/kingdominc/mods/22"
   }
 }
