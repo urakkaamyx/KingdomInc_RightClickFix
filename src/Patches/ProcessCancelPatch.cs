@@ -1,123 +1,36 @@
-using System;
-using Assets.Behaviour.Flow;
-using Assets.Behaviour.Flow.Elements;
-using Assets.Behaviour.Input;
-using Assets.Behaviour.UI;
-using Assets.Behaviour.UI.Farm;
-using Assets.Behaviour.UI.Shared;
-using Assets.Behaviour.UI.SwapFlow;
-using Assets.Behaviour.UI.TechTree;
-using Assets.Behaviour.UI.WarEffort;
-using HarmonyLib;
-using UnityEngine;
+using KingdomFoundation.Api;
 
 namespace KingdomRightClickFix
 {
-    /// <summary>
-    /// The game's right click (the "Cancel" input action, fired on button release) only closes popups,
-    /// the tech tree sub-tree and held ghosts. This patch lets it also close the remaining open menus,
-    /// returning to the workspace. The ESC menu is never touched.
-    /// </summary>
-    [HarmonyPatch(typeof(GameUI), nameof(GameUI.ProcessCancel))]
+    // Mod policy stays here. Native access and interception belong to Foundation.
     internal static class ProcessCancelPatch
     {
-        // Same threshold the game uses to tell a right-click from a right-drag pan of the workspace.
         private const float PanThreshold = 50f;
-
-        private static readonly AccessTools.FieldRef<GameUI, UIPopupMenu> PopupField =
-            AccessTools.FieldRefAccess<GameUI, UIPopupMenu>("_currentPopup");
-
-        private static readonly AccessTools.FieldRef<GameUI, TechTreeMenu> TechMenuField =
-            AccessTools.FieldRefAccess<GameUI, TechTreeMenu>("_techMenu");
-
-        // UI/world elements that already use a right click for their own action.
-        private static readonly Type[] RightClickConsumers =
-        {
-            typeof(CurrencyCell),
-            typeof(FarmMenuPlot),
-            typeof(WarEffortSoldierSprite),
-            typeof(SwapFlowItem),
-            typeof(RightClickAction),
-            typeof(WorldFlowIO),
-            typeof(WorldFlowPipeNode),
-            typeof(WorldFlowArenaSlot),
-            typeof(WorldFlowTrainingGroundsSlot),
+        private static readonly GameMenu[] CloseOrder = {
+            GameMenu.Build, GameMenu.Resources, GameMenu.Deconstruction, GameMenu.Decorations,
+            GameMenu.War, GameMenu.Forest, GameMenu.Farm, GameMenu.Dungeons, GameMenu.Items,
+            GameMenu.Clone, GameMenu.AreaMove
         };
-
-        // Returns false to skip the original method, true to let the vanilla behavior run.
-        private static bool Prefix(GameUI __instance)
+        internal static void Before(GameHookCall call)
         {
-            if (UIAlertWindow.Active || GameUI.MenuVisible)
-            {
-                return true;
-            }
-
-            if (PopupField(__instance) != null)
-            {
-                return true;
-            }
-
-            if (__instance.IsActive(GameUIType.Tech))
-            {
-                HandleTech(TechMenuField(__instance));
-                return false;
-            }
-
-            if (DragDropManager.Instance.CancelDragDrop())
-            {
-                return false;
-            }
-
-            if (PlayerInput.Instance.TraverseDistance >= PanThreshold || IsOverRightClickConsumer())
-            {
-                return false;
-            }
-
-            CloseOpenMenu(__instance);
-            return false;
+            if (call.IsCancelled) return;
+            var ui = FoundationApi.UiAccess;
+            if (ui.IsAlertVisible || ui.IsMenuVisible || ui.HasPopup) return;
+            if (ui.IsMenuOpen(GameMenu.Research)) { HandleTech(); call.Cancel(); return; }
+            if (ui.CancelDragDrop()) { call.Cancel(); return; }
+            if (ui.PointerTraverseDistance >= PanThreshold || IsOverRightClickConsumer()) { call.Cancel(); return; }
+            CloseOpenMenu(); call.Cancel();
         }
-
-        private static void HandleTech(TechTreeMenu tech)
+        private static void HandleTech()
         {
-            if (UIHelper.GetMouseOverUI<TechTreeListItem>() != null ||
-                PlayerInput.Instance.TraverseDistance >= PanThreshold)
-            {
-                return;
-            }
-
-            tech.ProcessEscape();
+            if (!FoundationApi.UiAccess.IsPointerOverResearchList && FoundationApi.UiAccess.PointerTraverseDistance < PanThreshold)
+                FoundationApi.UiAccess.ProcessResearchEscape();
         }
-
-        private static void CloseOpenMenu(GameUI ui)
+        private static void CloseOpenMenu()
         {
-            if (ui.IsActive(GameUIType.BuyMenu)) ui.ToggleBuyMenu(false);
-            else if (ui.IsActive(GameUIType.Resources)) ui.ToggleResourceMenu(false);
-            else if (ui.IsActive(GameUIType.Deconstruct)) ui.ToggleDeconstructMode(false);
-            else if (ui.IsActive(GameUIType.Deco)) ui.ToggleDecoMenu(false);
-            else if (ui.IsActive(GameUIType.WarEffort)) ui.ToggleWarEffortMenu(false);
-            else if (ui.IsActive(GameUIType.Forest)) ui.ToggleForestCrewMenu(false);
-            else if (ui.IsActive(GameUIType.Farm)) ui.ToggleFarmMenu(false);
-            else if (ui.IsActive(GameUIType.Dungeon)) ui.ToggleDungeonMenu(false);
-            else if (ui.IsActive(GameUIType.ItemMenu)) ui.ToggleItemMenu(false);
-            else if (ui.IsActive(GameUIType.Clone)) ui.ToggleCloneMode(false);
-            else if (ui.IsActive(GameUIType.AreaMove)) ui.ToggleAreaMove(false);
+            foreach (var menu in CloseOrder)
+                if (FoundationApi.UiAccess.IsMenuOpen(menu)) { FoundationApi.UiAccess.SetMenuVisible(menu, false); return; }
         }
-
-        private static bool IsOverRightClickConsumer()
-        {
-            foreach (GameObject hit in UIHelper.GetAllMouseOverUI())
-            {
-                foreach (Type consumer in RightClickConsumers)
-                {
-                    if (hit.GetComponentInParent(consumer) != null)
-                    {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
-        }
+        private static bool IsOverRightClickConsumer() => FoundationApi.UiAccess.PointerHasNativeRightClickAction;
     }
 }
-

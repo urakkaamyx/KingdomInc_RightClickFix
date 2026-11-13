@@ -1,5 +1,7 @@
 # Right Click Fix
 
+**Current release: 1.0.1 — for Kingdom Inc game version 1.0.14.**
+
 Right click now closes any open menu in Kingdom Inc. and takes you back to your workspace.
 
 In the base game, right click only closes popups, steps back in the tech tree and drops a held building. Menus such as the build menu and the tech tree itself ignore it. This mod makes them respond too.
@@ -20,6 +22,7 @@ Press the right mouse button without dragging. Each right click closes one layer
 ## Requirements
 
 - Kingdom Inc (Windows x64 Mono)
+- [Foundation](https://www.nexusmods.com/kingdominc/mods/18) 0.14.0 or newer, installed separately.
 - [BepInEx 5](https://github.com/BepInEx/BepInEx/releases/tag/v5.4.23.6) (5.4.23.6 or newer)
 
 ## Installation
@@ -33,7 +36,7 @@ Press the right mouse button without dragging. Each right click closes one layer
 
 | Class.Method | Hook Type | Impact |
 |---|---|---|
-| GameUI.ProcessCancel | Harmony Prefix | Lets right click close the build menu, tech tree, resources, deco, war effort, forest crew, farm, dungeon and item menus, and the deconstruct, clone and area-move modes. Popups, the ESC menu and alert windows keep their normal behavior. Another mod that also patches this method may conflict. |
+| GameUI.ProcessCancel | Foundation hook (prefix) | Lets right click close the build menu, tech tree, resources, deco, war effort, forest crew, farm, dungeon and item menus, and the deconstruct, clone and area-move modes. Popups, the ESC menu and alert windows keep their normal behavior. Another mod that also patches this method may conflict. |
 
 ## Removal
 
