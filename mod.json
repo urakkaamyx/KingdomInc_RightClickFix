@@ -7,8 +7,8 @@
   "repository": {
     "platform": "GitHub",
     "owner": "KingdomIncModding",
-    "name": "KingdomInc_RightClickFix",
-    "url": "https://github.com/KingdomIncModding/KingdomInc_RightClickFix",
+    "name": "RightClickFix",
+    "url": "https://github.com/KingdomIncModding/RightClickFix",
     "branch": "main",
     "visibility": "public",
     "topics": [],
@@ -56,7 +56,7 @@
     "gameIntegration": "Foundation"
   },
   "publishing": {
-    "githubReleases": "https://github.com/KingdomIncModding/KingdomInc_RightClickFix/releases/tag/v1.0.0",
+    "githubReleases": "https://github.com/KingdomIncModding/RightClickFix/releases/tag/v1.0.0",
     "nexusMods": "https://www.nexusmods.com/kingdominc/mods/22",
     "archivePreviousReleases": false
   }
