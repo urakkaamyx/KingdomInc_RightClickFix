@@ -6,9 +6,9 @@
   "description": "For Kingdom Inc game version 1.0.14. Right click closes any open menu (build menu, tech tree, resources and more) and returns you to the workspace. The ESC menu is left alone.",
   "repository": {
     "platform": "GitHub",
-    "owner": "urakkaamyx",
+    "owner": "KingdomIncModding",
     "name": "KingdomInc_RightClickFix",
-    "url": "https://github.com/urakkaamyx/KingdomInc_RightClickFix",
+    "url": "https://github.com/KingdomIncModding/KingdomInc_RightClickFix",
     "branch": "main",
     "visibility": "public",
     "topics": [],
@@ -56,7 +56,7 @@
     "gameIntegration": "Foundation"
   },
   "publishing": {
-    "githubReleases": "https://github.com/urakkaamyx/KingdomInc_RightClickFix/releases/tag/v1.0.0",
+    "githubReleases": "https://github.com/KingdomIncModding/KingdomInc_RightClickFix/releases/tag/v1.0.0",
     "nexusMods": "https://www.nexusmods.com/kingdominc/mods/22",
     "archivePreviousReleases": false
   }
